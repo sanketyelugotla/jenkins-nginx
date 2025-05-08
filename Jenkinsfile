@@ -22,7 +22,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                bat 'docker build -t ${IMAGE_NAME}:${TAG} .'  // Build Docker image
+                bat "docker build -t $IMAGE_NAME:$TAG ."  // Corrected Docker build command
             }
         }
 
@@ -37,7 +37,7 @@ pipeline {
         stage('Push to Docker Hub') {
             steps {
                 script {
-                    bat "docker push ${IMAGE_NAME}:${TAG}"  // Push image to Docker Hub
+                    bat "docker push $IMAGE_NAME:$TAG"  // Push image to Docker Hub
                 }
             }
         }
