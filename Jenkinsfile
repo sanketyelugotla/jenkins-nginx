@@ -45,7 +45,8 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    bat "docker run -p 8082:80 -d $IMAGE_NAME:$TAG"
+                    bat "docker rm -f nginx-cont"
+                    bat "docker run -p --name ngixn-cont 8082:80 -d $IMAGE_NAME:$TAG"
                 }
             }
         }
