@@ -18,7 +18,6 @@ pipeline {
                 bat 'docker --version'    // Check Docker version on Windows
                 bat 'docker info'         // Check Docker info on Windows
                 bat 'echo "FROM alpine" > Dockerfile'  // Create Dockerfile
-                bat 'docker build -t test-alpine .'  // Build Docker image
             }
         }
 
