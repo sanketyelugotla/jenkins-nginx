@@ -15,16 +15,17 @@ pipeline {
 
         stage('Test Docker') {
             steps {
-                sh 'docker --version'
-                sh 'docker info'
-                sh 'echo "FROM alpine" > Dockerfile'
-                sh 'docker build -t test-alpine .'
+                sh 'docker --version'    // Ensure Docker is installed
+                sh 'docker info'         // Check Docker info
+                sh 'echo "FROM alpine" > Dockerfile'  // Creates a new Dockerfile (adjust if needed)
+                sh 'docker build -t test-alpine .'  // Builds a Docker image using the current Dockerfile
             }
         }
 
         stage('Build Docker Image') {
             steps {
                 script {
+                    // Builds the Docker image
                     docker.build("${IMAGE_NAME}:${TAG}", ".")
                 }
             }
@@ -33,6 +34,7 @@ pipeline {
         stage('Login to Docker Hub') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'DOCKER_CREDENTIALS', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    // Log in to Docker Hub
                     sh "echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin"
                 }
             }
@@ -41,6 +43,7 @@ pipeline {
         stage('Push to Docker Hub') {
             steps {
                 script {
+                    // Push the Docker image to Docker Hub
                     docker.image("${IMAGE_NAME}:${TAG}").push()
                 }
             }
@@ -49,6 +52,7 @@ pipeline {
 
     post {
         always {
+            // Log out of Docker Hub
             sh 'docker logout'
         }
     }
