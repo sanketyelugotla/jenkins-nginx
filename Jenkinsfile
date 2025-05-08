@@ -4,6 +4,7 @@ pipeline {
     environment {
         IMAGE_NAME = "sanketyelugotla/nginx-cont"
         TAG = "latest"
+        CONTAINER_NAME = "nginx-cont"
     }
 
     stages {
@@ -45,13 +46,12 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    bat '''
-                        docker ps -a -q --filter "name=nginx-cont" | findstr . >nul
-                        if %errorlevel%==0 (
-                            docker rm -f nginx-cont
-                        )
-                    '''
-                    bat "docker run -p --name ngixn-cont 8082:80 -d $IMAGE_NAME:$TAG"
+                    echo 'Deploying the Docker container...'
+                    bat """
+                        docker stop ${CONTAINER_NAME} || exit 0
+                        docker rm ${CONTAINER_NAME} || exit 0
+                        docker run -d -p 8081:80 --name ${CONTAINER_NAME} ${IMAGE_NAME}:${BUILD_NUMBER}
+                    """
                 }
             }
         }
