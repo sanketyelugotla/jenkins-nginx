@@ -13,6 +13,15 @@ pipeline {
             }
         }
 
+        stage('Test Docker') {
+            steps {
+                sh 'docker --version'
+                sh 'docker info'
+                sh 'echo "FROM alpine" > Dockerfile'
+                sh 'docker build -t test-alpine .'
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 script {
