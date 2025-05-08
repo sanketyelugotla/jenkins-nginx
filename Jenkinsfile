@@ -15,10 +15,10 @@ pipeline {
 
         stage('Test Docker') {
             steps {
-                sh 'docker --version'    // Ensure Docker is installed
-                sh 'docker info'         // Check Docker info
-                sh 'echo "FROM alpine" > Dockerfile'  // Creates a new Dockerfile (adjust if needed)
-                sh 'docker build -t test-alpine .'  // Builds a Docker image using the current Dockerfile
+                bat 'docker --version'    // Check Docker version on Windows
+                bat 'docker info'         // Check Docker info on Windows
+                bat 'echo "FROM alpine" > Dockerfile'  // Create Dockerfile
+                bat 'docker build -t test-alpine .'  // Build Docker image
             }
         }
 
@@ -35,7 +35,7 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'DOCKER_CREDENTIALS', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                     // Log in to Docker Hub
-                    sh "echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin"
+                    bat "echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin"
                 }
             }
         }
@@ -53,7 +53,7 @@ pipeline {
     post {
         always {
             // Log out of Docker Hub
-            sh 'docker logout'
+            bat 'docker logout'
         }
     }
 }
