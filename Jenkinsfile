@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git 'https://github.com/sanketyelugotla/jenkins-nginx'
+                git branch: 'main', url: 'https://github.com/sanketyelugotla/jenkins-nginx'
             }
         }
 
