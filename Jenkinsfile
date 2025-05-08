@@ -43,15 +43,10 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
+         stage('Deploy') {
             steps {
                 script {
-                    echo 'Deploying the Docker container...'
-                    bat """
-                        docker stop ${CONTAINER_NAME} || exit 0
-                        docker rm ${CONTAINER_NAME} || exit 0
-                        docker run -d -p 8081:80 --name ${CONTAINER_NAME} ${IMAGE_NAME}:${BUILD_NUMBER}
-                    """
+                    bat "docker run -p 8082:80 -d $IMAGE_NAME:$TAG"
                 }
             }
         }
