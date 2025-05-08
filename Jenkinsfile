@@ -45,7 +45,12 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    bat "docker rm -f nginx-cont"
+                    bat '''
+                        docker ps -a -q --filter "name=nginx-cont" | findstr . >nul
+                        if %errorlevel%==0 (
+                            docker rm -f nginx-cont
+                        )
+                    '''
                     bat "docker run -p --name ngixn-cont 8082:80 -d $IMAGE_NAME:$TAG"
                 }
             }
