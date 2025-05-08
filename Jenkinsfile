@@ -41,6 +41,14 @@ pipeline {
                 }
             }
         }
+
+        stage('Deploy') {
+            steps {
+                script {
+                    bat "docker run -p 8082:80 -d $IMAGE_NAME:$TAG"
+                }
+            }
+        }
     }
 
     post {
